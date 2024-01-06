@@ -59,8 +59,29 @@ public class MemberRepositoryV0 {
         } catch (SQLException e) {
             log.error("DB Error", e);
             throw e;
-        }finally {
-            close(con,pstmt,rs);
+        } finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public void update(String memberId, int money) throws SQLException {
+        String sql = "UPDATE member SET money=? WHERE member_id=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, money);
+            pstmt.setString(2, memberId);
+            int resultSize = pstmt.executeUpdate(); // 쿼리를 실행하고 영향받은 row 수를 반환
+            log.info("resultSize={}", resultSize);
+        } catch (SQLException e) {
+            log.error("DB Error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
         }
     }
 
